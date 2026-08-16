@@ -1,0 +1,8 @@
+# Note: install PyTorch first, matching your CUDA version. Tested with:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu130
+fastapi
+uvicorn[standard]
+soundfile
+git+https://github.com/huggingface/diffusers@dafe3733fcfdbf3c48915fe77be3aef65b5d6a2d
+transformers
+accelerate

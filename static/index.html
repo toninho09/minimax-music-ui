@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MiniMax Music3 — Generator</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>🎵 MiniMax Music 3</h1>
+    <span id="model-badge" class="badge loading">loading model…</span>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>New song</h2>
+
+      <div class="field">
+        <label for="lyrics">Lyrics
+          <span class="hint">one section tag per line; text on the same line as a tag is dropped by the model</span>
+        </label>
+        <div id="tag-buttons" class="tags">
+          <button type="button" data-tag="Intro">Intro</button>
+          <button type="button" data-tag="Verse">Verse</button>
+          <button type="button" data-tag="Pre-Chorus">Pre-Chorus</button>
+          <button type="button" data-tag="Chorus">Chorus</button>
+          <button type="button" data-tag="Post-Chorus">Post-Chorus</button>
+          <button type="button" data-tag="Bridge">Bridge</button>
+          <button type="button" data-tag="Instrumental">Instrumental</button>
+          <button type="button" data-tag="Solo">Solo</button>
+          <button type="button" data-tag="Outro">Outro</button>
+        </div>
+        <textarea id="lyrics" rows="10" placeholder="[Verse]&#10;Your lines here&#10;&#10;[Chorus]&#10;The chorus..."></textarea>
+      </div>
+
+      <div class="field">
+        <label for="instructions">Music description
+          <span class="hint">genre, BPM, key, vocals, instruments, production</span>
+        </label>
+        <textarea id="instructions" rows="4" placeholder="A warm acoustic pop song with intimate female vocals, fingerpicked guitar, soft piano, and a gradual emotional build into a wide final chorus."></textarea>
+      </div>
+
+      <details class="caption-builder">
+        <summary>Structured caption <span class="hint">(optional — composes the description in the format recommended by the model card)</span></summary>
+        <div class="caption-section">
+          <strong>Global</strong>
+          <div class="grid-3">
+            <label>Genre <input id="cap-genre" placeholder="acoustic pop" /></label>
+            <label>Subgenre <input id="cap-subgenre" placeholder="folk pop" /></label>
+            <label>BPM <input id="cap-bpm" type="number" min="1" max="300" placeholder="96" /></label>
+            <label>Key <input id="cap-key" placeholder="C major" /></label>
+            <label>Mood progression <input id="cap-mood" placeholder="warm and intimate, building into the chorus" /></label>
+            <label>Listening scenario <input id="cap-scenario" placeholder="sunset road trip" /></label>
+            <label>Production <input id="cap-production" placeholder="modern, warm analog mix" /></label>
+          </div>
+        </div>
+        <div class="caption-section">
+          <strong>Vocals</strong>
+          <div class="grid-3">
+            <label>Vocal gender <input id="cap-vox-gender" placeholder="female lead" /></label>
+            <label>Timbre <input id="cap-vox-timbre" placeholder="soft, breathy, close" /></label>
+            <label>Performance / harmonies <input id="cap-vox-style" placeholder="intimate verses, stacked harmonies in chorus" /></label>
+          </div>
+        </div>
+        <div class="caption-section">
+          <strong>Arrangement</strong>
+          <div class="grid-3">
+            <label>Primary instruments <input id="cap-inst-main" placeholder="fingerpicked guitar, soft piano" /></label>
+            <label>Secondary instruments <input id="cap-inst-sec" placeholder="brushed drums, upright bass" /></label>
+            <label>Textures / groove <input id="cap-texture" placeholder="airy pads, gentle groove, wide reverb" /></label>
+          </div>
+        </div>
+      </details>
+
+      <div class="row">
+        <div class="field grow">
+          <label for="duration">Duration: <output id="duration-out">60s</output>
+            <span class="hint">cap: 6 min (9000 frames @ 25 fps)</span>
+          </label>
+          <input type="range" id="duration" min="10" max="360" step="5" value="60" />
+        </div>
+        <div class="field">
+          <label for="steps">Steps (flow-matching)
+            <span class="hint">default 30; more = better but slower</span>
+          </label>
+          <input type="number" id="steps" min="1" max="100" value="30" />
+        </div>
+        <div class="field">
+          <label for="seed">Seed <span class="hint">empty = random</span></label>
+          <input type="number" id="seed" min="0" placeholder="—" />
+        </div>
+      </div>
+
+      <button id="generate" class="primary" disabled>Generate music</button>
+    </section>
+
+    <section class="card" id="result-card" hidden>
+      <h2>Result</h2>
+      <div id="status-line" class="status"></div>
+      <div id="error-box" class="error" hidden></div>
+      <div id="audio-box" hidden>
+        <audio id="player" controls preload="metadata"></audio>
+        <div class="audio-actions">
+          <a id="download" class="button" download>Download WAV</a>
+          <span id="meta" class="hint"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

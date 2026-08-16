@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Generated audio (keep the empty folder)
+output/*
+!output/.gitkeep
+
+# Model weights from `hf download` (optional local cache, see README)
+model/
+
+# Env
+.env
