@@ -4,6 +4,8 @@ Local mini server (FastAPI + plain HTML/JS/CSS) to generate music with
 [MiniMax-Music3](https://huggingface.co/MiniMaxAI/MiniMax-Music3) running
 in-process via **diffusers** (bf16, ~24GB VRAM — targeting an RTX 3090).
 
+![UI screenshot](docs/screenshot.png)
+
 ## How it works
 
 - On startup, the server loads the pipeline in a background thread (takes
