@@ -6,3 +6,7 @@ soundfile
 git+https://github.com/huggingface/diffusers@dafe3733fcfdbf3c48915fe77be3aef65b5d6a2d
 transformers
 accelerate
+
+# Optional: only for mcp_server.py (MCP client for the API)
+fastmcp
+httpx

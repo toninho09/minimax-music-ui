@@ -99,10 +99,51 @@ curl -s http://127.0.0.1:8000/api/jobs/$JOB   # poll until status=done
 curl -o song.wav http://127.0.0.1:8000/api/audio/$JOB.wav
 ```
 
+## MCP
+
+`mcp_server.py` exposes the server as **MCP tools** (stdio transport) for
+Claude Desktop, Cursor and other MCP clients. It is a thin client over the
+HTTP API above — `server.py` must be running.
+
+| Tool | Description |
+|---|---|
+| `get_status` | Model status (`loading\|ready\|error`), offload mode, queue length, running? |
+| `generate_music` | Enqueue a job → returns `job_id` (does **not** wait) |
+| `get_job` | Poll a job: status, queue position, `audio_url` when done |
+
+Since generation takes minutes, tools follow the job pattern:
+`generate_music` → `job_id` → poll `get_job` until `done`, then use the
+absolute `audio_url`.
+
+Install (already in `requirements.txt`):
+
+```bash
+pip install fastmcp httpx
+```
+
+Client config (Claude Desktop `claude_desktop_config.json`, Cursor
+`.cursor/mcp.json`, ...):
+
+```json
+{
+  "mcpServers": {
+    "minimax-music": {
+      "command": "/absolute/path/to/minimax-music-ui/.venv/bin/python",
+      "args": ["/absolute/path/to/minimax-music-ui/mcp_server.py"],
+      "env": { "MUSIC_HOST": "127.0.0.1", "MUSIC_PORT": "8000" }
+    }
+  }
+}
+```
+
+> Env vars: `MUSIC_HOST`/`MUSIC_PORT` must match the running `server.py`;
+> `MUSIC_BASE_URL` overrides the full URL if needed.
+
 ## Structure
 
 ```
 server.py        # FastAPI: static files + job API + queue worker
+mcp_server.py    # optional MCP server (stdio) for the API
 static/          # index.html, app.js, style.css
 output/          # generated WAVs
 requirements.txt
